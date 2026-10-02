@@ -1,0 +1,111 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\PesertaResource\Pages;
+use App\Filament\Resources\PesertaResource\RelationManagers;
+use App\Models\Peserta;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+class PesertaResource extends Resource
+{
+    protected static ?string $model = Peserta::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    public static function form(Form $form): Form
+    {
+        return $form
+                ->schema([
+                Forms\Components\TextInput::make('nama')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Select::make('skema_id')
+                ->relationship('skema', 'nama_skema')
+                ->required()
+                ->searchable()
+                ->preload()
+                ->label('Skema Sertifikasi'),
+                Forms\Components\TextInput::make('instansi')
+                    ->required()
+                    ->maxLength(100),
+                Forms\Components\Select::make('kelas')
+                    ->required()
+                    ->label('Kelas')
+                    ->options([
+                        '10' => 'Grade X',
+                        '11' => 'Grade XI',
+                        '12' => 'Grade XII',
+                    ]),
+                Forms\Components\Textarea::make('alamat')
+                    ->required()
+                    ->maxLength(255),
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                Tables\Columns\TextColumn::make('nama')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('skema.nama_skema')
+                    ->label('Skema Sertifikasi')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('instansi')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('kelas')
+                    ->label('Kelas')
+                    ->sortable()
+                    ->formatStateUsing(fn($state)=> match($state){
+                        '10' => 'Grade X',
+                        '11' => 'Grade XI',
+                        '12' => 'Grade XII',
+                    }),
+                Tables\Columns\TextColumn::make('alamat')
+                    ->searchable(),
+            ])
+            ->filters([
+                
+            ])
+            ->actions([
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListPesertas::route('/'),
+            'create' => Pages\CreatePeserta::route('/create'),
+            'view' => Pages\ViewPeserta::route('/{record}'),
+            'edit' => Pages\EditPeserta::route('/{record}/edit'),
+        ];
+    }
+}
