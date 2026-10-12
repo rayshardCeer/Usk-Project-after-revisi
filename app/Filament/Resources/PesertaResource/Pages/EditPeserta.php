@@ -10,6 +10,11 @@ class EditPeserta extends EditRecord
 {
     protected static string $resource = PesertaResource::class;
 
+     public function getTitle(): string
+    {
+        return "Edit {$this->record->nama}"; 
+    }
+
     protected function getHeaderActions(): array
     {
         return [

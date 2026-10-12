@@ -10,6 +10,11 @@ class EditSkema extends EditRecord
 {
     protected static string $resource = SkemaResource::class;
 
+       public function getTitle(): string
+    {
+        return "Edit {$this->record->nama_skema}"; 
+    }
+
     protected function getHeaderActions(): array
     {
         return [
