@@ -25,12 +25,13 @@ return new class extends Migration
 
         Schema::create('pesertas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('skema_id')->constrained('skemas')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('skema_id')->nullable()->constrained('skemas')->onDelete('cascade');
             $table->string('nama');
             $table->string('email')->unique();
-            $table->string('instansi');
-            $table->string('kelas');
-            $table->string('alamat');
+            $table->string('instansi')->nullable();
+            $table->string('kelas')->nullable();
+            $table->string('alamat')->nullable();
             $table->timestamps();
         });
     }

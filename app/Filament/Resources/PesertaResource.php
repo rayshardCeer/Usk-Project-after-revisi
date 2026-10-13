@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PesertaResource\Pages;
-use App\Filament\Resources\PesertaResource\RelationManagers;
 use App\Models\Peserta;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -11,13 +10,14 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Override;
 
 class PesertaResource extends Resource
 {
     protected static ?string $model = Peserta::class;
+    protected static ?string $pluralLabel = 'Daftar Peserta Ujian';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form
     {
@@ -52,6 +52,18 @@ class PesertaResource extends Resource
                     ->maxLength(255),
             ]);
     }
+
+    #[Override]
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if(!auth()->user()->hasRole('super_admin')){
+          $query->where('user_id', auth()->id());
+        }
+            return $query;
+    }
+
 
     public static function table(Table $table): Table
     {
