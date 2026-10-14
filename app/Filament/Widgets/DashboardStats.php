@@ -22,12 +22,9 @@ class DashboardStats extends BaseWidget
                 ->color('primary'),
 
             Stat::make('Skema Terbaru', \App\Models\Skema::latest()->first()?->nama_skema ?? 'N/A')
-                ->description('Skema terbaru yang ditambahkan')
+                ->description('Skema yang baru saja ditambahkan')
                 ->color('warning'),
 
-            Stat::make('Peserta Terbaru', \App\Models\Peserta::latest()->first()?->nama ?? 'N/A')
-                ->description('Peserta terbaru yang terdaftar')
-                ->color('info'),
         ];
     }
 }

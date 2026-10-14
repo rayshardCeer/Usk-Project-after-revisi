@@ -21,6 +21,7 @@ class SkemaResource extends Resource
     protected static ?string $model = Skema::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-swatch';
+    protected static ?string $pluralLabel = 'Daftar Skema Sertifikasi';
 
     public static function form(Form $form): Form
     {
@@ -28,10 +29,18 @@ class SkemaResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama_skema')
                     ->required()
-                    ->maxLength(255),
+                    ->regex('/^[a-zA-Z\s]+$/')
+                    ->validationMessages([
+                        'regex' => 'Nama skema hanya boleh mengandung huruf dan spasi saja.',
+                    ])
+                    ->maxLength(50),
                 Forms\Components\Textarea::make('deskripsi_skema')
                     ->required()
-                    ->maxLength(1000),
+                    ->regex('/^[a-zA-Z\s]+$/')
+                    ->validationMessages([
+                        'regex' => 'Deskripsi skema hanya boleh mengandung huruf dan spasi saja.',
+                    ])
+                    ->maxLength(200),
             ]);
     }
 
