@@ -13,8 +13,9 @@ class Peserta extends Model
         'user_id',
         'skema_id',
         'nama',
+        'nik',
         'instansi',
-        'kelas',
+        'status',
         'email',
         'alamat',
     ];

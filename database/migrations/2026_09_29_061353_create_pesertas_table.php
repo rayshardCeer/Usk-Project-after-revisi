@@ -30,7 +30,8 @@ return new class extends Migration
             $table->string('nama');
             $table->string('email')->unique();
             $table->string('instansi')->nullable();
-            $table->string('kelas')->nullable();
+            $table->string('nik')->nullable()->unique();
+            $table->string('status')->nullable();
             $table->string('alamat')->nullable();
             $table->timestamps();
         });

@@ -34,7 +34,6 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->passwordReset()
             ->darkMode(false)
             ->plugins([
                 FilamentShieldPlugin::make(),
@@ -79,8 +78,10 @@ class AdminPanelProvider extends PanelProvider
     public function boot(): void
     {
         FilamentView::registerRenderHook(
-            PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
+            PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
             fn (): View => view('filament.hooks.back-to-home')
         );
     }
+
+    
 }

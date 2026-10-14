@@ -25,11 +25,11 @@ class PesertaResource extends Resource
                 ->schema([
                 Forms\Components\TextInput::make('nama')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(50),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(30),
                 Forms\Components\Select::make('skema_id')
                 ->relationship('skema', 'nama_skema')
                 ->required()
@@ -38,18 +38,21 @@ class PesertaResource extends Resource
                 ->label('Skema Sertifikasi'),
                 Forms\Components\TextInput::make('instansi')
                     ->required()
-                    ->maxLength(100),
-                Forms\Components\Select::make('kelas')
+                    ->maxLength(30),
+                Forms\Components\TextInput::make('nik')
+                    ->label("NIK")
                     ->required()
-                    ->label('Kelas')
+                    ->maxLength(16),
+                Forms\Components\Select::make('status')
+                    ->required()
+                    ->label('Status')
                     ->options([
-                        '10' => 'Grade X',
-                        '11' => 'Grade XI',
-                        '12' => 'Grade XII',
+                        'worker' => 'Pekerja',
+                        'student' => 'Siswa',
                     ]),
                 Forms\Components\Textarea::make('alamat')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(100),
             ]);
     }
 
