@@ -14,6 +14,7 @@ class Peserta extends Model
         'skema_id',
         'nama',
         'nik',
+        'no_hp',
         'instansi',
         'status',
         'email',

@@ -31,8 +31,8 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('bnsp')
+            ->path('bnsp')
             ->login()
             ->darkMode(false)
             ->plugins([
@@ -79,6 +79,12 @@ class AdminPanelProvider extends PanelProvider
     {
         FilamentView::registerRenderHook(
             PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
+            fn (): View => view('filament.hooks.back-to-home')
+        );
+
+        
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
             fn (): View => view('filament.hooks.back-to-home')
         );
     }

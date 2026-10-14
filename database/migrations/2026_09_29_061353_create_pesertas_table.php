@@ -28,9 +28,10 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('skema_id')->nullable()->constrained('skemas')->onDelete('cascade');
             $table->string('nama');
+            $table->string('nik')->unique()->nullable();
             $table->string('email')->unique();
+            $table->string('no_hp')->nullable();
             $table->string('instansi')->nullable();
-            $table->string('nik')->nullable()->unique();
             $table->string('status')->nullable();
             $table->string('alamat')->nullable();
             $table->timestamps();

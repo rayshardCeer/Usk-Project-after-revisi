@@ -7,6 +7,7 @@ use App\Models\Peserta;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,11 +26,37 @@ class PesertaResource extends Resource
                 ->schema([
                 Forms\Components\TextInput::make('nama')
                     ->required()
-                    ->maxLength(50),
+                    ->regex('/^[a-zA-Z\s]+$/')
+                    ->validationMessages([
+                        'regex' => 'Nama hanya boleh mengandung huruf dan spasi.',
+                    ])
+                    ->maxLength(30),
+                Forms\Components\TextInput::make('nik')
+                    ->required()
+                    ->mask(RawJs::make('return {mask: "0000000000000000"}'))
+                    ->extrainputAttributes(['onkeypress' => 'return event.charCode >= 48 && event.charCode <= 57'])
+                    ->minLength(16)
+                    ->maxLength(16)
+                    ->validationMessages([
+                        'min' => 'NIK harus terdiri dari 16 digit.',
+                        'max' => 'NIK harus terdiri dari 16 digit.',
+                    ]),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
                     ->maxLength(30),
+                    Forms\Components\TextInput::make('no_hp')
+                        ->label('Nomor Handphone')
+                        ->hint('contoh: 081234567890')
+                        ->required()
+                        ->regex('/^08\d{9,11}$/')
+                        ->validationMessages([
+                            'regex' => 'Nomor handphone harus diawali dengan 08 dan berjumlah 11-13 angka.',
+                        ])
+                        ->mask(RawJs::make('return {mask: "0"}'))
+                        ->extrainputAttributes(['onkeypress' => 'return event.charCode >= 48 && event.charCode <= 57'])
+                        ->minLength(11)
+                        ->maxLength(13),
                 Forms\Components\Select::make('skema_id')
                 ->relationship('skema', 'nama_skema')
                 ->required()
@@ -38,21 +65,22 @@ class PesertaResource extends Resource
                 ->label('Skema Sertifikasi'),
                 Forms\Components\TextInput::make('instansi')
                     ->required()
-                    ->maxLength(30),
-                Forms\Components\TextInput::make('nik')
-                    ->label("NIK")
-                    ->required()
-                    ->maxLength(16),
+                    ->maxLength(50),
                 Forms\Components\Select::make('status')
                     ->required()
                     ->label('Status')
                     ->options([
-                        'worker' => 'Pekerja',
-                        'student' => 'Siswa',
+                        'worker' => 'Worker',
+                        'student' => 'Student',
                     ]),
+             
                 Forms\Components\Textarea::make('alamat')
                     ->required()
-                    ->maxLength(100),
+                    ->regex('/^[a-zA-Z0-9\s,.-]+$/')
+                    ->validationMessages([
+                        'regex' => 'Alamat hanya boleh mengandung huruf, angka, spasi, koma, titik, dan tanda hubung.',
+                    ])
+                    ->maxLength(150),
             ]);
     }
 
@@ -74,20 +102,24 @@ class PesertaResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('nik')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('no_hp')
+                    ->label('Nomor Handphone')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('skema.nama_skema')
                     ->label('Skema Sertifikasi')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('instansi')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('kelas')
-                    ->label('Kelas')
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Status')
                     ->sortable()
                     ->formatStateUsing(fn($state)=> match($state){
-                        '10' => 'Grade X',
-                        '11' => 'Grade XI',
-                        '12' => 'Grade XII',
+                        'worker' => 'Worker',
+                        'student' => 'Student',
                     }),
                 Tables\Columns\TextColumn::make('alamat')
                     ->searchable(),

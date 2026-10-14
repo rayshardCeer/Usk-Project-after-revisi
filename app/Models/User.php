@@ -17,7 +17,7 @@ use Spatie\Permission\Models\Role;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * Get the attributes that should be cast.
@@ -25,7 +25,6 @@ class User extends Authenticatable
      * @return array<string, string>
      * 
      */
-    use HasRoles;
 
     protected function casts(): array
     {
